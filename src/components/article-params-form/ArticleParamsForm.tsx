@@ -27,18 +27,20 @@ export const ArticleParamsForm = ({
 	initialState,
 	handleChange,
 }: ArticleParamsFormType) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [formState, setFormState] = useState<ArticleStateType>(initialState);
 
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		if (!isMenuOpen) return;
+
 		const handleMouseDown = (event: MouseEvent) => {
 			if (
 				sidebarRef.current &&
 				!sidebarRef.current.contains(event.target as Node)
 			) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 
@@ -68,10 +70,15 @@ export const ArticleParamsForm = ({
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+			<ArrowButton
+				isOpen={isMenuOpen}
+				onClick={() => setIsMenuOpen(!isMenuOpen)}
+			/>
 			<aside
 				ref={sidebarRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isMenuOpen,
+				})}>
 				<form onSubmit={onSubmit} className={styles.form}>
 					<div className={styles.content}>
 						<Text weight={800} size={31} uppercase>
